@@ -1,6 +1,9 @@
 health-center:
-	mkdir out
+	mkdir -p out
 	g++ -o out/health-center main.cpp
 
 run:
-	./out/health-center 
+	./out/health-center
+
+clean:
+	rm out/*
