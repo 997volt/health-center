@@ -4,7 +4,7 @@
 
 using namespace std;
 
-const int MAX_ROWS = 1000;
+const int MAX_ROWS = 810;
 
 
 class WaistlineData {
@@ -60,7 +60,13 @@ public:
     }
 
     void printdata(){
-        cout << "date: " << date << ", weight: " << weight << endl;
+        cout << "date: " << date 
+        << ",  calories: " << calories 
+        << ",  protein: " << protein 
+        << ",  weight: " << weight 
+        << ",  bodyfat: " << bodyfat 
+        << ",  musclemass: " << musclemass
+        << endl;
     }
 };
 
@@ -83,6 +89,10 @@ int main() {
     }
     // close the file after read opeartion is complete
     file.close();
+
+    for (int i = 0; i < MAX_ROWS; i++) {
+        wldata[i].printdata();
+    }
 
     return 0;
 }
