@@ -1,6 +1,6 @@
 health-center:
 	mkdir -p out
-	g++ -o out/health-center main.cpp
+	g++ main.cpp -o out/health-center
 
 run:
 	./out/health-center
