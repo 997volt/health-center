@@ -1,15 +1,16 @@
 #include <iostream>
 #include <fstream>
-#include <sstream>
+#include <vector>
 
 using namespace std;
 
 const int MAX_ROWS = 1000;
-const int MAX_COLS = 10;
+
 
 class WaistlineData {
 private:
 
+    const int COLS_NUMBER = 11;
     string date;
     string calories;
     string protein;
@@ -17,13 +18,28 @@ private:
     string bodyfat;
     string musclemass;
 
+    vector<size_t> get_comma_positions(string data_row){
+        vector<size_t> positions;
+        size_t pos = data_row.find(',', 0);
+        while(pos != string::npos)
+        {
+            positions.push_back(pos);
+            pos = data_row.find(',',pos+1);
+        }
+        return positions;
+    }
+
 public:
-    WaistlineData(string datarow) {
-        cout << datarow << endl;
+    WaistlineData() {
+    }
+
+    void set_all(string data_row){
+        vector<size_t> pos = get_comma_positions(data_row);
+        date = data_row.substr(0,pos[0]);
+        calories = data_row.substr(pos[0]+1,pos[1]-pos[0]-1);
     }
 
     void printdata(){
-
         cout << "date: " << date << ", weight: " << weight << endl;
     }
 };
@@ -35,33 +51,18 @@ int main() {
         return 1;
     }
 
-    // Define a 2D array to store the CSV data
-    string data[MAX_ROWS][MAX_COLS];
+    WaistlineData wldata[MAX_ROWS];
     string line;
     int row = 0;
     // Store the CSV data from the CSV file to the 2D array
     while (getline(file, line) && row < MAX_ROWS) {
-        stringstream ss(line);
-        WaistlineData wldata = WaistlineData(line);
-        string cell;
-        int col = 0;
-        while (getline(ss, cell, ',') && col < MAX_COLS) {
-            data[row][col] = cell;
-            col++;
+        if(row != 0){
+            wldata[row].set_all(line); 
         }
         row++;
     }
     // close the file after read opeartion is complete
     file.close();
-
-    // Print the data stored in the 2D array
-    for (int i = 0; i < row; i++) {
-        for (int j = 0; j < MAX_COLS && !data[i][j].empty();
-             j++) {
-            cout << data[i][j] << " ";
-        }
-        cout << endl;
-    }
 
     return 0;
 }
