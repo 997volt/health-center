@@ -7,6 +7,27 @@ using namespace std;
 const int MAX_ROWS = 1000;
 const int MAX_COLS = 10;
 
+class WaistlineData {
+private:
+
+    string date;
+    string calories;
+    string protein;
+    string weight;
+    string bodyfat;
+    string musclemass;
+
+public:
+    WaistlineData(string datarow) {
+        cout << datarow << endl;
+    }
+
+    void printdata(){
+
+        cout << "date: " << date << ", weight: " << weight << endl;
+    }
+};
+
 int main() {
     ifstream file("in/diary_export.csv");
     if (!file.is_open()) {
@@ -21,6 +42,7 @@ int main() {
     // Store the CSV data from the CSV file to the 2D array
     while (getline(file, line) && row < MAX_ROWS) {
         stringstream ss(line);
+        WaistlineData wldata = WaistlineData(line);
         string cell;
         int col = 0;
         while (getline(ss, cell, ',') && col < MAX_COLS) {
@@ -40,6 +62,6 @@ int main() {
         }
         cout << endl;
     }
-    
+
     return 0;
 }
