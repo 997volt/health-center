@@ -29,14 +29,34 @@ private:
         return positions;
     }
 
+    string read_element(string data_row, vector<size_t> comma_positions, size_t element_number){
+        if(element_number == 0){
+            return data_row.substr(0,comma_positions[0]);;
+        }
+        else if (element_number == COLS_NUMBER-1) {
+            return data_row.substr(
+                comma_positions[element_number-1]+1, data_row.length());
+        }
+        else {
+            return data_row.substr(
+                comma_positions[element_number-1]+1,
+                comma_positions[element_number]-comma_positions[element_number-1]-1);
+        }
+    }
+
 public:
     WaistlineData() {
     }
 
     void set_all(string data_row){
-        vector<size_t> pos = get_comma_positions(data_row);
-        date = data_row.substr(0,pos[0]);
-        calories = data_row.substr(pos[0]+1,pos[1]-pos[0]-1);
+        vector<size_t> comma_positions = get_comma_positions(data_row);
+
+        date = read_element(data_row, comma_positions, 0);
+        calories = read_element(data_row, comma_positions, 1);
+        protein = read_element(data_row, comma_positions, 6);
+        weight = read_element(data_row, comma_positions, 8);
+        bodyfat = read_element(data_row, comma_positions, 9);
+        musclemass = read_element(data_row, comma_positions, 10);
     }
 
     void printdata(){
