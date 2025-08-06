@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <iostream>
 #include <fstream>
+#include <string>
 #include <vector>
 
 using namespace std;
@@ -43,15 +44,7 @@ private:
     }
 
 public:
-    WaistlineData() {
-    }
-
-
     WaistlineData(string data_row) {
-        set_all(data_row);
-    }
-
-    void set_all(string data_row){
         vector<size_t> comma_positions = get_comma_positions(data_row);
 
         date = read_element(data_row, comma_positions, 0);
@@ -73,14 +66,19 @@ public:
     }
 };
 
-int main() {
-    ifstream file("in/diary_export.csv");
+ifstream open_wl_file(string path){
+    ifstream file(path);
     if (!file.is_open()) {
-        cerr << "Error opening file!" << endl;
-        return 1;
+        throw runtime_error("Error opening file");
     }
+    return file;
+}
 
+
+int main() {
     vector<WaistlineData> wldata;
+    ifstream file = open_wl_file("in/diary_export.csv");
+
     string line;
     int row = 0;
     while (getline(file, line)) {
