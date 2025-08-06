@@ -1,11 +1,9 @@
+#include <algorithm>
 #include <iostream>
 #include <fstream>
 #include <vector>
 
 using namespace std;
-
-const int MAX_ROWS = 810;
-
 
 class WaistlineData {
 private:
@@ -48,6 +46,11 @@ public:
     WaistlineData() {
     }
 
+
+    WaistlineData(string data_row) {
+        set_all(data_row);
+    }
+
     void set_all(string data_row){
         vector<size_t> comma_positions = get_comma_positions(data_row);
 
@@ -77,22 +80,21 @@ int main() {
         return 1;
     }
 
-    WaistlineData wldata[MAX_ROWS];
+    vector<WaistlineData> wldata;
     string line;
     int row = 0;
-    // Store the CSV data from the CSV file to the 2D array
-    while (getline(file, line) && row < MAX_ROWS) {
+    while (getline(file, line)) {
         if(row != 0){
-            wldata[row].set_all(line); 
+            wldata.push_back(WaistlineData(line));
         }
         row++;
     }
     // close the file after read opeartion is complete
     file.close();
 
-    for (int i = 0; i < MAX_ROWS; i++) {
+    for (int i = 0; i < wldata.size(); i++) {
         wldata[i].printdata();
-    }
+    }  
 
     return 0;
 }
