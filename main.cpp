@@ -78,16 +78,12 @@ ifstream open_wl_file(string path){
 int main() {
     vector<WaistlineData> wldata;
     ifstream file = open_wl_file("in/diary_export.csv");
-
     string line;
-    int row = 0;
     while (getline(file, line)) {
-        if(row != 0){
+        if(line.find("Date") == std::string::npos){
             wldata.push_back(WaistlineData(line));
         }
-        row++;
     }
-    // close the file after read opeartion is complete
     file.close();
 
     for (int i = 0; i < wldata.size(); i++) {
