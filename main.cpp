@@ -74,10 +74,8 @@ ifstream open_wl_file(string path){
     return file;
 }
 
-
-int main() {
-    vector<WaistlineData> wldata;
-    ifstream file = open_wl_file("in/diary_export.csv");
+void read_wl_data(string path, vector<WaistlineData> &wldata){
+    ifstream file = open_wl_file(path);
     string line;
     while (getline(file, line)) {
         if(line.find("Date") == std::string::npos){
@@ -85,6 +83,11 @@ int main() {
         }
     }
     file.close();
+}
+
+int main() {
+    vector<WaistlineData> wldata;
+    read_wl_data("in/diary_export.csv", wldata);
 
     for (int i = 0; i < wldata.size(); i++) {
         wldata[i].printdata();
