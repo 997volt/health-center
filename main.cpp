@@ -1,7 +1,9 @@
 #include <ctime>
+#include <iomanip>
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <sstream>
 #include <vector>
 
 using namespace std;
@@ -48,10 +50,9 @@ private:
     }
 
     tm get_date(string date_string){
-        tm date;
-        date.tm_mday = stoi(date_string.substr(3,2));
-        date.tm_mon = stoi(date_string.substr(0,2));
-        date.tm_year = stoi(date_string.substr(6,4));;
+        tm date = {};
+        istringstream ss(date_string);
+        ss >> get_time(&date, "%m/%d/%Y");
         return date;
     }
 
@@ -68,7 +69,7 @@ public:
     }
 
     void printdata(){
-        cout << "date: " << date.tm_mday << "-" << date.tm_mon << "-" << date.tm_year 
+        cout << "date: " << date.tm_mday << "-" << date.tm_mon+1 << "-" << date.tm_year+1900 
         << ",  calories: " << calories 
         << ",  protein: " << protein 
         << ",  weight: " << weight 
