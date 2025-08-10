@@ -1,4 +1,4 @@
-#include <algorithm>
+#include <ctime>
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -9,7 +9,7 @@ using namespace std;
 class WaistlineData {
 private:
     const int COLS_NUMBER = 11;
-    string date;
+    tm date;
     int calories;
     float protein;
     float weight;
@@ -47,11 +47,19 @@ private:
         return result;
     }
 
+    tm get_date(string date_string){
+        tm date;
+        date.tm_mday = stoi(date_string.substr(3,2));
+        date.tm_mon = stoi(date_string.substr(0,2));
+        date.tm_year = stoi(date_string.substr(6,4));;
+        return date;
+    }
+
 public:
     WaistlineData(string data_row) {
         vector<size_t> comma_positions = get_comma_positions(data_row);
 
-        date = read_element(data_row, comma_positions, 0);
+        date = get_date(read_element(data_row, comma_positions, 0));
         calories = stoi(read_element(data_row, comma_positions, 1));
         protein = stof(read_element(data_row, comma_positions, 6));
         weight = stof(read_element(data_row, comma_positions, 8));
@@ -60,7 +68,7 @@ public:
     }
 
     void printdata(){
-        cout << "date: " << date 
+        cout << "date: " << date.tm_mday << "-" << date.tm_mon << "-" << date.tm_year 
         << ",  calories: " << calories 
         << ",  protein: " << protein 
         << ",  weight: " << weight 
