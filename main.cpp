@@ -8,14 +8,13 @@ using namespace std;
 
 class WaistlineData {
 private:
-
     const int COLS_NUMBER = 11;
     string date;
-    string calories;
-    string protein;
-    string weight;
-    string bodyfat;
-    string musclemass;
+    int calories;
+    float protein;
+    float weight;
+    float bodyfat;
+    float musclemass;
 
     vector<size_t> get_comma_positions(string data_row){
         vector<size_t> positions;
@@ -29,18 +28,23 @@ private:
     }
 
     string read_element(string data_row, vector<size_t> comma_positions, size_t element_number){
+        string result = "";
         if(element_number == 0){
-            return data_row.substr(0,comma_positions[0]);;
+            result = data_row.substr(0,comma_positions[0]);;
         }
         else if (element_number == COLS_NUMBER-1) {
-            return data_row.substr(
+            result = data_row.substr(
                 comma_positions[element_number-1]+1, data_row.length());
         }
         else {
-            return data_row.substr(
+            result = data_row.substr(
                 comma_positions[element_number-1]+1,
                 comma_positions[element_number]-comma_positions[element_number-1]-1);
         }
+        if(result == ""){
+            result = "0";
+        }
+        return result;
     }
 
 public:
@@ -48,11 +52,11 @@ public:
         vector<size_t> comma_positions = get_comma_positions(data_row);
 
         date = read_element(data_row, comma_positions, 0);
-        calories = read_element(data_row, comma_positions, 1);
-        protein = read_element(data_row, comma_positions, 6);
-        weight = read_element(data_row, comma_positions, 8);
-        bodyfat = read_element(data_row, comma_positions, 9);
-        musclemass = read_element(data_row, comma_positions, 10);
+        calories = stoi(read_element(data_row, comma_positions, 1));
+        protein = stof(read_element(data_row, comma_positions, 6));
+        weight = stof(read_element(data_row, comma_positions, 8));
+        bodyfat = stof(read_element(data_row, comma_positions, 9));
+        musclemass = stof(read_element(data_row, comma_positions, 10));
     }
 
     void printdata(){
@@ -65,6 +69,7 @@ public:
         << endl;
     }
 };
+
 
 ifstream open_wl_file(string path){
     ifstream file(path);
