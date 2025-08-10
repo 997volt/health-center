@@ -8,9 +8,11 @@
 
 using namespace std;
 
+
+const int WLDATA_COLS_NUMBER = 11;
+
 class WaistlineData {
 private:
-    const int COLS_NUMBER = 11;
     tm date;
     int calories;
     float protein;
@@ -34,7 +36,7 @@ private:
         if(element_number == 0){
             result = data_row.substr(0,comma_positions[0]);;
         }
-        else if (element_number == COLS_NUMBER-1) {
+        else if (element_number == WLDATA_COLS_NUMBER-1) {
             result = data_row.substr(
                 comma_positions[element_number-1]+1, data_row.length());
         }
