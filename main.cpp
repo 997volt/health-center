@@ -131,6 +131,13 @@ public:
             }
         }
     }
+
+    void printdata(){
+        cout << "date: " << date.tm_mday << "-" << date.tm_mon+1 << "-" << date.tm_year+1900 
+        << ",  calories: " << calories 
+        << ",  weight: " << weight 
+        << endl;
+    }
 };
 
 bool is_date_after(tm tocheck, tm relative_date){
