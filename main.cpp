@@ -105,7 +105,7 @@ private:
     float calories;
 
 public:
-    WeeklyData(vector<WaistlineData> wldata, tm date_done){
+    WeeklyData(vector<WaistlineData> &wldata, tm date_done){
         int weight_datapoints = 0;
         int cal_datapoints = 0;
         weight = 0;
@@ -164,12 +164,18 @@ void read_wl_data(string path, vector<WaistlineData> &wldata){
     file.close();
 }
 
+void calculate_weekly_data(vector<WaistlineData> &wldata, vector<WeeklyData> &weekly_data){
+
+}
+
 int main() {
     vector<WaistlineData> wldata;
+    vector<WeeklyData> weekly_data;
     read_wl_data("in/diary_export.csv", wldata);
+    calculate_weekly_data(wldata, weekly_data);
 
-    for (int i = 0; i < wldata.size(); i++) {
-        wldata[i].printdata();
+    for (int i = 0; i < weekly_data.size(); i++) {
+        weekly_data[i].printdata();
     }  
 
     return 0;
