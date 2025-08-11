@@ -81,6 +81,13 @@ public:
     }
 };
 
+// container for averaged weekly data
+class WeeklyData {
+private:
+    tm date; //last day of data
+    float weigh;
+    float calories;
+};
 
 ifstream open_wl_file(string path){
     ifstream file(path);
