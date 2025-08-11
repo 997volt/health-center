@@ -10,6 +10,10 @@ using namespace std;
 
 
 const int WLDATA_COLS_NUMBER = 11;
+//day of week when all averages for week are calculated
+const int DAY_OF_WEEK_FOR_AVERAGES = 5; 
+
+bool is_date_after(tm tocheck, tm relative_date);
 
 class WaistlineData {
 private:
@@ -79,15 +83,60 @@ public:
         << ",  musclemass: " << musclemass
         << endl;
     }
+
+    tm get_tm_date(){
+        return date;
+    }
+
+    int get_calories(){
+        return calories;
+    }
+
+    float get_weight(){
+        return weight;
+    }
 };
 
 // container for averaged weekly data
 class WeeklyData {
 private:
     tm date; //last day of data
-    float weigh;
+    float weight;
     float calories;
+
+public:
+    WeeklyData(vector<WaistlineData> wldata, tm date_done){
+        int weight_datapoints = 0;
+        int cal_datapoints = 0;
+        weight = 0;
+        calories = 0;
+        for (int i = 0; i < wldata.size(); i++) {
+            tm date = wldata[i].get_tm_date();
+            if (is_date_after(date, date_done)){
+                float dataset_weight = wldata[i].get_weight();
+                if (dataset_weight != 0) {
+                    weight = weight + dataset_weight;
+                    weight_datapoints++;
+                }
+                float dataset_calories = float(wldata[i].get_calories());
+                if (dataset_calories != 0) {
+                    calories = calories + dataset_calories;
+                    cal_datapoints++;
+                }
+                if (date.tm_wday == DAY_OF_WEEK_FOR_AVERAGES) {
+                    weight = weight / weight_datapoints;
+                    calories = calories / cal_datapoints;
+                    return;
+                }
+            }
+        }
+    }
 };
+
+bool is_date_after(tm tocheck, tm relative_date){
+    return ((tocheck.tm_year > relative_date.tm_year)
+                ||(tocheck.tm_year == relative_date.tm_year && tocheck.tm_yday > relative_date.tm_yday));
+}
 
 ifstream open_wl_file(string path){
     ifstream file(path);
