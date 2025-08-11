@@ -111,8 +111,8 @@ public:
         weight = 0;
         calories = 0;
         for (int i = 0; i < wldata.size(); i++) {
-            tm date = wldata[i].get_tm_date();
-            if (is_date_after(date, date_done)){
+            tm dataset_date = wldata[i].get_tm_date();
+            if (is_date_after(dataset_date, date_done)){
                 float dataset_weight = wldata[i].get_weight();
                 if (dataset_weight != 0) {
                     weight = weight + dataset_weight;
@@ -123,13 +123,19 @@ public:
                     calories = calories + dataset_calories;
                     cal_datapoints++;
                 }
-                if (date.tm_wday == DAY_OF_WEEK_FOR_AVERAGES) {
+                if (dataset_date.tm_wday == DAY_OF_WEEK_FOR_AVERAGES
+                    || i == wldata.size()-1) {
                     weight = weight / weight_datapoints;
                     calories = calories / cal_datapoints;
+                    date = dataset_date;
                     return;
                 }
             }
         }
+    }
+
+    tm get_date(){
+        return date;
     }
 
     void printdata(){
@@ -143,6 +149,10 @@ public:
 bool is_date_after(tm tocheck, tm relative_date){
     return ((tocheck.tm_year > relative_date.tm_year)
                 ||(tocheck.tm_year == relative_date.tm_year && tocheck.tm_yday > relative_date.tm_yday));
+}
+
+bool is_date_same(tm tocheck, tm relative_date){
+    return (tocheck.tm_year == relative_date.tm_year && tocheck.tm_yday == relative_date.tm_yday);
 }
 
 ifstream open_wl_file(string path){
@@ -165,7 +175,14 @@ void read_wl_data(string path, vector<WaistlineData> &wldata){
 }
 
 void calculate_weekly_data(vector<WaistlineData> &wldata, vector<WeeklyData> &weekly_data){
-
+    tm date_done = {};
+    bool exit = false;
+    do {
+        WeeklyData calc_data = WeeklyData(wldata, date_done);
+        date_done = calc_data.get_date();
+        weekly_data.push_back(calc_data);
+        exit = is_date_same(wldata[wldata.size()-1].get_tm_date(), date_done);
+    }while (!exit);
 }
 
 int main() {
