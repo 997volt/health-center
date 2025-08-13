@@ -2,6 +2,7 @@
 #include <iomanip>
 #include <iostream>
 #include <fstream>
+#include <iterator>
 #include <string>
 #include <sstream>
 #include <vector>
@@ -143,6 +144,10 @@ public:
         return calories;
     }
 
+    float get_weight(){
+        return weight;
+    }
+
     void printdata(){
         cout << "date: " << date.tm_mday << "-" << date.tm_mon+1 << "-" << date.tm_year+1900 
         << ",  calories: " << calories 
@@ -212,10 +217,17 @@ int main() {
     read_wl_data("in/diary_export.csv", wldata);
     calculate_weekly_data(wldata, weekly_data);
     int last_run_length = last_run_count(weekly_data);
+    int last_run_start_index = weekly_data.size()-last_run_length;
+    float last_run_weight_diff = weekly_data[weekly_data.size()-1].get_weight() 
+        - weekly_data[last_run_start_index-1].get_weight();
+    float last_run_weight_diff_per_week = last_run_weight_diff/last_run_length;
     
-    for (int i = weekly_data.size()-last_run_length; i < weekly_data.size(); i++) {
+    for (int i = last_run_start_index; i < weekly_data.size(); i++) {
         weekly_data[i].printdata();
     }  
+    cout << "Last run length (weeks): " << last_run_length << endl;
+    cout << "Weight diff: " << last_run_weight_diff << endl;
+    cout << "Weight diff per week: " << last_run_weight_diff_per_week << endl;
 
     return 0;
 }
