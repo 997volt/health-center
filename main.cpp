@@ -5,6 +5,7 @@
 #include <string>
 #include <sstream>
 #include <vector>
+#include <cmath>
 
 using namespace std;
 
@@ -138,6 +139,10 @@ public:
         return date;
     }
 
+    float get_calories(){
+        return calories;
+    }
+
     void printdata(){
         cout << "date: " << date.tm_mday << "-" << date.tm_mon+1 << "-" << date.tm_year+1900 
         << ",  calories: " << calories 
@@ -185,6 +190,22 @@ void calculate_weekly_data(vector<WaistlineData> &wldata, vector<WeeklyData> &we
     }while (!exit);
 }
 
+int last_run_count(vector<WeeklyData> &weekly_data){
+    int num_of_items = weekly_data.size();
+    int num_of_counted = 1;
+    float avg_calories = weekly_data[num_of_items-1].get_calories(); 
+    for (int i = num_of_items-2; i > 0; i--) {
+        float this_item = weekly_data[i].get_calories();
+        if (abs(this_item - avg_calories) > 500){
+            break;
+        }
+        avg_calories = (avg_calories*num_of_counted + this_item)/(num_of_counted+1); 
+        num_of_counted++;
+    }
+    return num_of_counted;
+}
+
+
 int main() {
     vector<WaistlineData> wldata;
     vector<WeeklyData> weekly_data;
@@ -194,6 +215,7 @@ int main() {
     for (int i = 0; i < weekly_data.size(); i++) {
         weekly_data[i].printdata();
     }  
+    cout << last_run_count(weekly_data);
 
     return 0;
 }
