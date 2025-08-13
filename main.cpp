@@ -211,11 +211,11 @@ int main() {
     vector<WeeklyData> weekly_data;
     read_wl_data("in/diary_export.csv", wldata);
     calculate_weekly_data(wldata, weekly_data);
-
-    for (int i = 0; i < weekly_data.size(); i++) {
+    int last_run_length = last_run_count(weekly_data);
+    
+    for (int i = weekly_data.size()-last_run_length; i < weekly_data.size(); i++) {
         weekly_data[i].printdata();
     }  
-    cout << last_run_count(weekly_data);
 
     return 0;
 }
