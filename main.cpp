@@ -2,7 +2,6 @@
 #include <iomanip>
 #include <iostream>
 #include <fstream>
-#include <iterator>
 #include <string>
 #include <sstream>
 #include <vector>
@@ -14,6 +13,8 @@ using namespace std;
 const int WLDATA_COLS_NUMBER = 11;
 //day of week when all averages for week are calculated
 const int DAY_OF_WEEK_FOR_AVERAGES = 5; 
+const char CSV_SEPARATOR = ';';
+const int MAX_CALORIES_DIFF_IN_RUN = 600;
 
 bool is_date_after(tm tocheck, tm relative_date);
 
@@ -28,11 +29,11 @@ private:
 
     vector<size_t> get_comma_positions(string data_row){
         vector<size_t> positions;
-        size_t pos = data_row.find(',', 0);
+        size_t pos = data_row.find(CSV_SEPARATOR, 0);
         while(pos != string::npos)
         {
             positions.push_back(pos);
-            pos = data_row.find(',',pos+1);
+            pos = data_row.find(CSV_SEPARATOR,pos+1);
         }
         return positions;
     }
@@ -201,7 +202,7 @@ int last_run_count(vector<WeeklyData> &weekly_data){
     float avg_calories = weekly_data[num_of_items-1].get_calories(); 
     for (int i = num_of_items-2; i > 0; i--) {
         float this_item = weekly_data[i].get_calories();
-        if (abs(this_item - avg_calories) > 500){
+        if (abs(this_item - avg_calories) > MAX_CALORIES_DIFF_IN_RUN){
             break;
         }
         avg_calories = (avg_calories*num_of_counted + this_item)/(num_of_counted+1); 
