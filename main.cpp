@@ -170,6 +170,19 @@ private:
         weight_diff_precentage = _weight_diff_precentage;
     }
 
+    WeightAnalisysData(float _avg_weight, float previous_weight){
+        
+        avg_weight = _avg_weight;
+        if (previous_weight != 0) {
+            weight_diff_kg = avg_weight - previous_weight;
+            weight_diff_precentage = 100 * weight_diff_kg / avg_weight;
+        }
+        else {
+            weight_diff_kg = 0;
+            weight_diff_precentage = 0;            
+        }
+    }
+
     WeightAnalisysData(float _avg_weight){
         avg_weight = _avg_weight;
         weight_diff_kg = 0;
@@ -178,6 +191,9 @@ private:
 
     float get_avg_weight(){
         return avg_weight;
+    }
+    float get_weight_diff_precentage(){
+        return weight_diff_precentage;
     }
 };
 
@@ -223,6 +239,8 @@ void calculate_weekly_data(vector<WaistlineData> &wldata, vector<WeeklyData> &we
 void get_avg_weights(vector<WaistlineData> &wldata, vector<WeightAnalisysData> &avg_weight_vector, int num_of_weeks){
     float combined_weight = 0;
     int weight_datapoints = 0;
+    float avg_weight = 0;
+    float previous_weight = 0;
     for (int day = 0; day < num_of_weeks*7; day++){
         int data_index = wldata.size() - day - 1;
         float wlweight = wldata[data_index].get_weight();
@@ -231,8 +249,9 @@ void get_avg_weights(vector<WaistlineData> &wldata, vector<WeightAnalisysData> &
             weight_datapoints += 1;
         }
         if (day % 7 == 6) {
-            float avg_weight = combined_weight/weight_datapoints;
-            avg_weight_vector.push_back(WeightAnalisysData(avg_weight));
+            avg_weight = combined_weight/weight_datapoints;
+            avg_weight_vector.push_back(WeightAnalisysData(avg_weight, previous_weight));
+            previous_weight = avg_weight;
             combined_weight = 0;
             weight_datapoints = 0;
         }
@@ -244,6 +263,7 @@ void analyse_last_weeks(vector<WaistlineData> &wldata){
     get_avg_weights(wldata, avg_weight, 3);
     for (int i = 0; i < avg_weight.size(); i++){
         cout << "avg_weight[" << i << "] = " << avg_weight[i].get_avg_weight() << endl;
+        cout << "weight_diff_precentage[" << i << "] = " << avg_weight[i].get_weight_diff_precentage() << endl;
     }
 }
 
