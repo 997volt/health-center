@@ -196,6 +196,25 @@ void calculate_weekly_data(vector<WaistlineData> &wldata, vector<WeeklyData> &we
     }while (!exit);
 }
 
+void analyse_last_weeks(vector<WaistlineData> &wldata){
+    float combined_weight = 0;
+    int weight_datapoints = 0;
+    float avg_weight[3] = {0,0,0};
+    for (int day = 0; day < 21; day++){
+        int wlweight = wldata[wldata.size()-day-1].get_weight();
+        if (wlweight != 0){
+            combined_weight += wlweight;
+            weight_datapoints += 1;
+        }
+        if (day % 7 == 6) {
+            avg_weight[int(floor(day/7))] = combined_weight/weight_datapoints;
+        }
+    }
+    for (int i = 0; i < 3; i++){
+        cout << "avg_weight[" << i << "] = " << avg_weight[i] << endl;
+    }
+}
+
 int last_run_count(vector<WeeklyData> &weekly_data){
     int num_of_items = weekly_data.size();
     int num_of_counted = 1;
@@ -216,6 +235,8 @@ int main() {
     vector<WaistlineData> wldata;
     vector<WeeklyData> weekly_data;
     read_wl_data("in/diary_export.csv", wldata);
+    analyse_last_weeks(wldata);
+    /*
     calculate_weekly_data(wldata, weekly_data);
     int last_run_length = last_run_count(weekly_data);
     int last_run_start_index = weekly_data.size()-last_run_length;
@@ -229,6 +250,7 @@ int main() {
     cout << "Last run length (weeks): " << last_run_length << endl;
     cout << "Weight diff: " << last_run_weight_diff << endl;
     cout << "Weight diff per week: " << last_run_weight_diff_per_week << endl;
+    */
 
     return 0;
 }
