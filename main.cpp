@@ -175,6 +175,10 @@ private:
         weight_diff_kg = 0;
         weight_diff_precentage = 0;
     }
+
+    float get_avg_weight(){
+        return avg_weight;
+    }
 };
 
 bool is_date_after(tm tocheck, tm relative_date){
@@ -216,7 +220,7 @@ void calculate_weekly_data(vector<WaistlineData> &wldata, vector<WeeklyData> &we
     }while (!exit);
 }
 
-void get_avg_weights(vector<WaistlineData> &wldata, vector<float> &avg_weight, int num_of_weeks){
+void get_avg_weights(vector<WaistlineData> &wldata, vector<WeightAnalisysData> &avg_weight_vector, int num_of_weeks){
     float combined_weight = 0;
     int weight_datapoints = 0;
     for (int day = 0; day < num_of_weeks*7; day++){
@@ -227,7 +231,8 @@ void get_avg_weights(vector<WaistlineData> &wldata, vector<float> &avg_weight, i
             weight_datapoints += 1;
         }
         if (day % 7 == 6) {
-            avg_weight.push_back(combined_weight/weight_datapoints);
+            float avg_weight = combined_weight/weight_datapoints;
+            avg_weight_vector.push_back(WeightAnalisysData(avg_weight));
             combined_weight = 0;
             weight_datapoints = 0;
         }
@@ -235,10 +240,10 @@ void get_avg_weights(vector<WaistlineData> &wldata, vector<float> &avg_weight, i
 }
 
 void analyse_last_weeks(vector<WaistlineData> &wldata){
-    vector<float> avg_weight;
+    vector<WeightAnalisysData> avg_weight;
     get_avg_weights(wldata, avg_weight, 3);
     for (int i = 0; i < avg_weight.size(); i++){
-        cout << "avg_weight[" << i << "] = " << avg_weight[i] << endl;
+        cout << "avg_weight[" << i << "] = " << avg_weight[i].get_avg_weight() << endl;
     }
 }
 
