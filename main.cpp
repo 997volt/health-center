@@ -157,6 +157,26 @@ public:
     }
 };
 
+class WeightAnalisysData {
+private:
+    float avg_weight;
+    float weight_diff_kg;
+    float weight_diff_precentage;
+
+    public:
+    WeightAnalisysData(float _avg_weight, float _weight_diff_kg, float _weight_diff_precentage){
+        avg_weight = _avg_weight;
+        weight_diff_kg = _weight_diff_kg;
+        weight_diff_precentage = _weight_diff_precentage;
+    }
+
+    WeightAnalisysData(float _avg_weight){
+        avg_weight = _avg_weight;
+        weight_diff_kg = 0;
+        weight_diff_precentage = 0;
+    }
+};
+
 bool is_date_after(tm tocheck, tm relative_date){
     return ((tocheck.tm_year > relative_date.tm_year)
                 ||(tocheck.tm_year == relative_date.tm_year && tocheck.tm_yday > relative_date.tm_yday));
