@@ -201,13 +201,16 @@ void analyse_last_weeks(vector<WaistlineData> &wldata){
     int weight_datapoints = 0;
     float avg_weight[3] = {0,0,0};
     for (int day = 0; day < 21; day++){
-        int wlweight = wldata[wldata.size()-day-1].get_weight();
+        int data_index = wldata.size() - day - 1;
+        float wlweight = wldata[data_index].get_weight();
         if (wlweight != 0){
             combined_weight += wlweight;
             weight_datapoints += 1;
         }
         if (day % 7 == 6) {
             avg_weight[int(floor(day/7))] = combined_weight/weight_datapoints;
+            combined_weight = 0;
+            weight_datapoints = 0;
         }
     }
     for (int i = 0; i < 3; i++){
