@@ -17,6 +17,7 @@ const int WLDATA_COLS_NUMBER = 11;
 const int DAY_OF_WEEK_FOR_AVERAGES = 5; 
 const char CSV_SEPARATOR = ';';
 const int MAX_CALORIES_DIFF_IN_RUN = 600;
+const int DAYS_TO_ANALYSE = 15;
 
 bool is_date_after(tm tocheck, tm relative_date);
 
@@ -365,26 +366,9 @@ int last_run_count(vector<WeeklyData> &weekly_data){
 
 int main() {
     vector<WaistlineData> wldata;
-    vector<WeeklyData> weekly_data;
     read_wl_data("in/diary_export.csv", wldata);
-    analyse_last_weeks(wldata);
-    Regression regression = Regression(wldata, 15);
+    Regression regression = Regression(wldata, DAYS_TO_ANALYSE);
     regression.print_function();
-    /*
-    calculate_weekly_data(wldata, weekly_data);
-    int last_run_length = last_run_count(weekly_data);
-    int last_run_start_index = weekly_data.size()-last_run_length;
-    float last_run_weight_diff = weekly_data[weekly_data.size()-1].get_weight() 
-        - weekly_data[last_run_start_index-1].get_weight();
-    float last_run_weight_diff_per_week = last_run_weight_diff/last_run_length;
-    
-    for (int i = last_run_start_index; i < weekly_data.size(); i++) {
-        weekly_data[i].printdata();
-    }  
-    cout << "Last run length (weeks): " << last_run_length << endl;
-    cout << "Weight diff: " << last_run_weight_diff << endl;
-    cout << "Weight diff per week: " << last_run_weight_diff_per_week << endl;
-    */
 
     return 0;
 }
