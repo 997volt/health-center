@@ -197,6 +197,26 @@ private:
     }
 };
 
+class Regression {
+    private:
+        vector<float> x;
+        vector<float> y;
+    
+    public:
+        Regression(vector<WaistlineData> &wldata, int num_of_measurements){
+            if(num_of_measurements <= wldata.size()){
+                for (int day = 0; day < num_of_measurements; day++){
+                    int data_index = wldata.size() - num_of_measurements + day;
+                    float wlweight = wldata[data_index].get_weight();
+                    if (wlweight != 0){
+                        x.push_back(wlweight);
+                        y.push_back(day);
+                    }
+                }
+            }
+        }
+};
+
 bool is_date_after(tm tocheck, tm relative_date){
     return ((tocheck.tm_year > relative_date.tm_year)
                 ||(tocheck.tm_year == relative_date.tm_year && tocheck.tm_yday > relative_date.tm_yday));
@@ -288,6 +308,7 @@ int main() {
     vector<WeeklyData> weekly_data;
     read_wl_data("in/diary_export.csv", wldata);
     analyse_last_weeks(wldata);
+    Regression regression = Regression(wldata, 20);
     /*
     calculate_weekly_data(wldata, weekly_data);
     int last_run_length = last_run_count(weekly_data);
