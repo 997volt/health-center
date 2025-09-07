@@ -254,8 +254,8 @@ class Regression {
                     int data_index = wldata.size() - num_of_measurements + day;
                     float wlweight = wldata[data_index].get_weight();
                     if (wlweight != 0){
-                        x.push_back(wlweight);
-                        y.push_back(day);
+                        x.push_back(day);
+                        y.push_back(wlweight);
                     }
                 }
             }
@@ -266,6 +266,14 @@ class Regression {
 
         float get_coefficent(){
             return a;
+        }
+
+        float get_contant_term(){
+            return b;
+        }
+
+        void print_function(){
+            cout << "y = " << a << "x + " << b << endl;
         }
 };
 
@@ -360,8 +368,8 @@ int main() {
     vector<WeeklyData> weekly_data;
     read_wl_data("in/diary_export.csv", wldata);
     analyse_last_weeks(wldata);
-    Regression regression = Regression(wldata, 20);
-    cout << regression.get_coefficent() << endl;
+    Regression regression = Regression(wldata, 15);
+    regression.print_function();
     /*
     calculate_weekly_data(wldata, weekly_data);
     int last_run_length = last_run_count(weekly_data);
