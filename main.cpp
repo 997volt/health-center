@@ -2,6 +2,8 @@
 #include <iomanip>
 #include <iostream>
 #include <fstream>
+#include <iterator>
+#include <ostream>
 #include <string>
 #include <sstream>
 #include <vector>
@@ -201,6 +203,49 @@ class Regression {
     private:
         vector<float> x;
         vector<float> y;
+
+        // from formula y = ax + b
+        float a;
+        float b;
+        float sum_x;
+        float sum_y;
+        float sum_xx;
+        float sum_xy;
+        float sum_yy;
+
+        void calculate_sums(){
+            sum_x = 0;
+            sum_y = 0;
+            sum_xx = 0;
+            sum_xy = 0;
+            sum_yy = 0;
+            for (int i = 0; i < x.size(); i++){
+                float this_x = x[i];
+                float this_y = y[i];
+                sum_x += this_x;
+                sum_y += this_y;
+                sum_xx += this_x*this_x;
+                sum_xy += this_x*this_y;
+                sum_yy += this_y*this_y;
+            }
+        }
+
+        // a is a coefficent of calculated function
+        void calculate_a(){
+            float num_of_datapoints = x.size();
+            float numerator = num_of_datapoints * sum_xy - sum_x * sum_y;
+            float denominator = num_of_datapoints * sum_xx - sum_x * sum_x;
+            a = numerator / denominator;
+        }
+
+        // b is contant term of calculated function
+        void calculate_b(){
+            float num_of_datapoints = x.size();
+            float numerator = sum_y * sum_xx - sum_x * sum_xy;
+            float denominator = num_of_datapoints * sum_xx - sum_x * sum_x;
+            b = numerator / denominator;
+        }
+
     
     public:
         Regression(vector<WaistlineData> &wldata, int num_of_measurements){
@@ -214,6 +259,13 @@ class Regression {
                     }
                 }
             }
+            calculate_sums();
+            calculate_a();
+            calculate_b();
+        }
+
+        float get_coefficent(){
+            return a;
         }
 };
 
@@ -309,6 +361,7 @@ int main() {
     read_wl_data("in/diary_export.csv", wldata);
     analyse_last_weeks(wldata);
     Regression regression = Regression(wldata, 20);
+    cout << regression.get_coefficent() << endl;
     /*
     calculate_weekly_data(wldata, weekly_data);
     int last_run_length = last_run_count(weekly_data);
