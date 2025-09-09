@@ -17,7 +17,7 @@ const int WLDATA_COLS_NUMBER = 11;
 const int DAY_OF_WEEK_FOR_AVERAGES = 5; 
 const char CSV_SEPARATOR = ';';
 const int MAX_CALORIES_DIFF_IN_RUN = 600;
-const int DAYS_TO_ANALYSE = 15;
+const int DAYS_TO_ANALYSE = 10;
 
 bool is_date_after(tm tocheck, tm relative_date);
 
@@ -363,12 +363,24 @@ int last_run_count(vector<WeeklyData> &weekly_data){
     return num_of_counted;
 }
 
+void analyse_regression(float coefficent){
+    if(coefficent > 0.045){
+        cout << "Coefficent > 0.045; too many calories for bulking" << endl;
+    }
+    else if (coefficent > 0.025){
+        cout << "0.25 < Coefficent < 0.045; ideal range for bulking" << endl;
+    }
+    else{
+        cout << "Coefficent < 0.025; too little calories for bulking" << endl;
+    }
+}
 
 int main() {
     vector<WaistlineData> wldata;
     read_wl_data("in/diary_export.csv", wldata);
     Regression regression = Regression(wldata, DAYS_TO_ANALYSE);
     regression.print_function();
-
+    analyse_regression(regression.get_coefficent());
+    // expect a to be between 0.025 and 0.045 when bulking (around 0.25% weekly)
     return 0;
 }
