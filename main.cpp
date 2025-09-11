@@ -375,12 +375,33 @@ void analyse_regression(float coefficent){
     }
 }
 
+float get_average_calories(vector<WaistlineData> &wldata, int num_of_measurements){
+    float sum_calories = 0;
+    float num_of_found_measurements = 0;
+    float avg_calories;
+    if(num_of_measurements <= wldata.size()){
+        for (int day = 0; day < num_of_measurements; day++){
+            int data_index = wldata.size() - num_of_measurements + day;
+            float wlcaloreis = wldata[data_index].get_calories();
+            if (wlcaloreis != 0){
+                sum_calories += wlcaloreis;
+                num_of_found_measurements++;
+            }
+        }
+    }
+    if(num_of_found_measurements > 0){
+        avg_calories = sum_calories/num_of_found_measurements;
+    }
+    return avg_calories;
+}
+
 int main() {
     vector<WaistlineData> wldata;
     read_wl_data("in/diary_export.csv", wldata);
     Regression regression = Regression(wldata, DAYS_TO_ANALYSE);
     regression.print_function();
     analyse_regression(regression.get_coefficent());
+    cout << "avg_calories = " << get_average_calories(wldata, DAYS_TO_ANALYSE) << endl;;
     // expect a to be between 0.025 and 0.045 when bulking (around 0.25% weekly)
     return 0;
 }
