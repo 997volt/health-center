@@ -2,21 +2,15 @@
 #include <iomanip>
 #include <iostream>
 #include <fstream>
-#include <iterator>
 #include <ostream>
 #include <string>
 #include <sstream>
 #include <vector>
-#include <cmath>
 
 using namespace std;
 
-
 const int WLDATA_COLS_NUMBER = 11;
-//day of week when all averages for week are calculated
-const int DAY_OF_WEEK_FOR_AVERAGES = 5; 
 const char CSV_SEPARATOR = ';';
-const int MAX_CALORIES_DIFF_IN_RUN = 600;
 const int DAYS_TO_ANALYSE = 10;
 
 //around 0.25% weekly
