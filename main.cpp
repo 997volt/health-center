@@ -17,8 +17,6 @@ const int DAYS_TO_ANALYSE = 10;
 const float COEFFICENT_BULKING_MAX = 0.05;
 const float COEFFICENT_BULKING_MIN = 0.025;
 
-bool is_date_after(tm tocheck, tm relative_date);
-bool is_date_same(tm tocheck, tm relative_date);
 ifstream open_wl_file(string path);
 
 class WaistlineData {
@@ -180,15 +178,6 @@ class Regression {
             cout << "y = " << a << "x + " << b << endl;
         }
 };
-
-bool is_date_after(tm tocheck, tm relative_date){
-    return ((tocheck.tm_year > relative_date.tm_year)
-                ||(tocheck.tm_year == relative_date.tm_year && tocheck.tm_yday > relative_date.tm_yday));
-}
-
-bool is_date_same(tm tocheck, tm relative_date){
-    return (tocheck.tm_year == relative_date.tm_year && tocheck.tm_yday == relative_date.tm_yday);
-}
 
 ifstream open_wl_file(string path){
     ifstream file(path);
