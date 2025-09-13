@@ -19,6 +19,10 @@ const char CSV_SEPARATOR = ';';
 const int MAX_CALORIES_DIFF_IN_RUN = 600;
 const int DAYS_TO_ANALYSE = 10;
 
+//around 0.25% weekly
+const float COEFFICENT_BULKING_MAX = 0.05;
+const float COEFFICENT_BULKING_MIN = 0.025;
+
 bool is_date_after(tm tocheck, tm relative_date);
 bool is_date_same(tm tocheck, tm relative_date);
 ifstream open_wl_file(string path);
@@ -212,14 +216,14 @@ void read_wl_data(string path, vector<WaistlineData> &wldata){
 }
 
 void analyse_regression(float coefficent){
-    if(coefficent > 0.045){
-        cout << "Coefficent > 0.045; too many calories for bulking" << endl;
+    if(coefficent > COEFFICENT_BULKING_MAX){
+        cout << "Coefficent > " << COEFFICENT_BULKING_MAX << "; too many calories for bulking" << endl;
     }
-    else if (coefficent > 0.025){
-        cout << "0.25 < Coefficent < 0.045; ideal range for bulking" << endl;
+    else if (coefficent > COEFFICENT_BULKING_MIN){
+        cout << COEFFICENT_BULKING_MIN << " < Coefficent < " << COEFFICENT_BULKING_MAX << "; ideal range for bulking" << endl;
     }
     else{
-        cout << "Coefficent < 0.025; too little calories for bulking" << endl;
+        cout << "Coefficent < " << COEFFICENT_BULKING_MIN << "; too little calories for bulking" << endl;
     }
 }
 
@@ -250,6 +254,5 @@ int main() {
     regression.print_function();
     analyse_regression(regression.get_coefficent());
     cout << "avg_calories = " << get_average_calories(wldata, DAYS_TO_ANALYSE) << endl;;
-    // expect a to be between 0.025 and 0.045 when bulking (around 0.25% weekly)
     return 0;
 }
