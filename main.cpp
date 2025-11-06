@@ -28,7 +28,7 @@ private:
     float bodyfat;
     float musclemass;
 
-    vector<size_t> get_comma_positions(string data_row){
+    vector<size_t> get_comma_positions(string data_row) const{
         vector<size_t> positions;
         size_t pos = data_row.find(CSV_SEPARATOR, 0);
         while(pos != string::npos)
@@ -39,7 +39,7 @@ private:
         return positions;
     }
 
-    string read_element(string data_row, vector<size_t> comma_positions, size_t element_number){
+    string read_element(string data_row, vector<size_t> comma_positions, size_t element_number) const{
         string result = "";
         if(element_number == 0){
             result = data_row.substr(0,comma_positions[0]);;
@@ -59,7 +59,7 @@ private:
         return result;
     }
 
-    tm get_date(string date_string){
+    tm get_date(string date_string) const{
         tm date = {};
         istringstream ss(date_string);
         ss >> get_time(&date, "%m/%d/%Y");
@@ -78,7 +78,7 @@ public:
         musclemass = stof(read_element(data_row, comma_positions, 10));
     }
 
-    void printdata(){
+    void printdata() const{
         cout << "date: " << date.tm_mday << "-" << date.tm_mon+1 << "-" << date.tm_year+1900 
         << ",  calories: " << calories 
         << ",  protein: " << protein 
@@ -88,20 +88,20 @@ public:
         << endl;
     }
 
-    tm get_tm_date(){
+    tm get_tm_date() const{
         return date;
     }
 
-    int get_calories(){
+    int get_calories() const{
         return calories;
     }
 
-    float get_bodyfat(){
+    float get_bodyfat() const{
         return bodyfat;
     }
 
 
-    float get_weight(){
+    float get_weight() const{
         return weight;
     }
 };
@@ -171,15 +171,15 @@ class Regression {
             calculate_b();
         }
 
-        float get_coefficent(){
+        float get_coefficent() const{
             return a;
         }
 
-        float get_contant_term(){
+        float get_contant_term() const{
             return b;
         }
 
-        void print_function(){
+        void print_function() const{
             cout << "y = " << a << "x + " << b << endl;
         }
 };
