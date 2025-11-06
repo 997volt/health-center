@@ -215,10 +215,10 @@ void analyse_regression(float coefficent){
     }
 }
 
-float get_average_calories(vector<WaistlineData> &wldata, int num_of_measurements){
+int get_average_calories(vector<WaistlineData> &wldata, int num_of_measurements){
     float sum_calories = 0;
     float num_of_found_measurements = 0;
-    float avg_calories;
+    int avg_calories;
     if(num_of_measurements <= wldata.size()){
         for (int day = 0; day < num_of_measurements; day++){
             int data_index = wldata.size() - num_of_measurements + day;
@@ -230,7 +230,7 @@ float get_average_calories(vector<WaistlineData> &wldata, int num_of_measurement
         }
     }
     if(num_of_found_measurements > 0){
-        avg_calories = sum_calories/num_of_found_measurements;
+        avg_calories = (int)(sum_calories/num_of_found_measurements);
     }
     return avg_calories;
 }
@@ -262,7 +262,13 @@ int main() {
     Regression regression = Regression(wldata, DAYS_TO_ANALYSE);
     regression.print_function();
     analyse_regression(regression.get_coefficent());
-    cout << "avg_calories = " << get_average_calories(wldata, DAYS_TO_ANALYSE) << endl;
-    cout << "avg_bodyfat = " << get_average_bodyfat(wldata, DAYS_TO_ANALYSE) << "%" << endl;
+
+    int avg_calories = get_average_calories(wldata, DAYS_TO_ANALYSE);
+    float avg_bodyfat = get_average_bodyfat(wldata, DAYS_TO_ANALYSE);
+    cout << "avg_calories = " << avg_calories << endl;
+    cout << "avg_bodyfat = " << avg_bodyfat << "%" << endl;
+    if(avg_bodyfat > 20){
+        cout << "Your bodyfat is greater that 20%, you should be cutting";
+    }
     return 0;
 }
