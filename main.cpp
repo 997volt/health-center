@@ -14,8 +14,8 @@ const char CSV_SEPARATOR = ';';
 const int DAYS_TO_ANALYSE = 10;
 
 //around 0.25% weekly
-const float COEFFICENT_BULKING_MAX = 0.05;
-const float COEFFICENT_BULKING_MIN = 0.025;
+const float COEFFICENT_BULKING_MAX = 0.05f;
+const float COEFFICENT_BULKING_MIN = 0.025f;
 
 ifstream open_wl_file(string path);
 
@@ -96,7 +96,7 @@ public:
         return calories;
     }
 
-    int get_bodyfat(){
+    float get_bodyfat(){
         return bodyfat;
     }
 
@@ -139,17 +139,17 @@ class Regression {
 
         // a is a coefficent of calculated function
         void calculate_a(){
-            float num_of_datapoints = x.size();
-            float numerator = num_of_datapoints * sum_xy - sum_x * sum_y;
-            float denominator = num_of_datapoints * sum_xx - sum_x * sum_x;
+            long num_of_datapoints = x.size();
+            float numerator = (float)num_of_datapoints * sum_xy - sum_x * sum_y;
+            float denominator = (float)num_of_datapoints * sum_xx - sum_x * sum_x;
             a = numerator / denominator;
         }
 
         // b is contant term of calculated function
         void calculate_b(){
-            float num_of_datapoints = x.size();
+            long num_of_datapoints = x.size();
             float numerator = sum_y * sum_xx - sum_x * sum_xy;
-            float denominator = num_of_datapoints * sum_xx - sum_x * sum_x;
+            float denominator = (float)num_of_datapoints * sum_xx - sum_x * sum_x;
             b = numerator / denominator;
         }
 
@@ -158,10 +158,10 @@ class Regression {
         Regression(vector<WaistlineData> &wldata, int num_of_measurements){
             if(num_of_measurements <= wldata.size()){
                 for (int day = 0; day < num_of_measurements; day++){
-                    int data_index = wldata.size() - num_of_measurements + day;
+                    long data_index = wldata.size() - num_of_measurements + day;
                     float wlweight = wldata[data_index].get_weight();
                     if (wlweight != 0){
-                        x.push_back(day);
+                        x.push_back((float)day);
                         y.push_back(wlweight);
                     }
                 }
@@ -221,10 +221,10 @@ int get_average_calories(vector<WaistlineData> &wldata, int num_of_measurements)
     int avg_calories;
     if(num_of_measurements <= wldata.size()){
         for (int day = 0; day < num_of_measurements; day++){
-            int data_index = wldata.size() - num_of_measurements + day;
-            float wlcaloreis = wldata[data_index].get_calories();
+            long data_index = wldata.size() - num_of_measurements + day;
+            int wlcaloreis = wldata[data_index].get_calories();
             if (wlcaloreis != 0){
-                sum_calories += wlcaloreis;
+                sum_calories += (float)wlcaloreis;
                 num_of_found_measurements++;
             }
         }
@@ -242,7 +242,7 @@ float get_average_bodyfat(vector<WaistlineData> &wldata, int num_of_measurements
     float avg_bodyfat;
     if(num_of_measurements <= wldata.size()){
         for (int day = 0; day < num_of_measurements; day++){
-            int data_index = wldata.size() - num_of_measurements + day;
+            int data_index = (int)wldata.size() - num_of_measurements + day;
             float wl_bodyfat = wldata[data_index].get_bodyfat();
             if (wl_bodyfat != 0){
                 sum_bodyfat += wl_bodyfat;
