@@ -96,6 +96,11 @@ public:
         return calories;
     }
 
+    int get_bodyfat(){
+        return bodyfat;
+    }
+
+
     float get_weight(){
         return weight;
     }
@@ -230,12 +235,34 @@ float get_average_calories(vector<WaistlineData> &wldata, int num_of_measurement
     return avg_calories;
 }
 
+
+float get_average_bodyfat(vector<WaistlineData> &wldata, int num_of_measurements){
+    float sum_bodyfat = 0;
+    float num_of_found_measurements = 0;
+    float avg_bodyfat;
+    if(num_of_measurements <= wldata.size()){
+        for (int day = 0; day < num_of_measurements; day++){
+            int data_index = wldata.size() - num_of_measurements + day;
+            float wl_bodyfat = wldata[data_index].get_bodyfat();
+            if (wl_bodyfat != 0){
+                sum_bodyfat += wl_bodyfat;
+                num_of_found_measurements++;
+            }
+        }
+    }
+    if(num_of_found_measurements > 0){
+        avg_bodyfat = sum_bodyfat/num_of_found_measurements;
+    }
+    return avg_bodyfat;
+}
+
 int main() {
     vector<WaistlineData> wldata;
     read_wl_data("in/diary_export.csv", wldata);
     Regression regression = Regression(wldata, DAYS_TO_ANALYSE);
     regression.print_function();
     analyse_regression(regression.get_coefficent());
-    cout << "avg_calories = " << get_average_calories(wldata, DAYS_TO_ANALYSE) << endl;;
+    cout << "avg_calories = " << get_average_calories(wldata, DAYS_TO_ANALYSE) << endl;
+    cout << "avg_bodyfat = " << get_average_bodyfat(wldata, DAYS_TO_ANALYSE) << "%" << endl;
     return 0;
 }
