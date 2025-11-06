@@ -1,0 +1,14 @@
+[
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-o",
+      "out/health-center",
+      "main.cpp"
+    ],
+    "directory": "/home/user/Documents/code/health-center",
+    "file": "/home/user/Documents/code/health-center/main.cpp",
+    "output": "/home/user/Documents/code/health-center/out/health-center"
+  }
+]
