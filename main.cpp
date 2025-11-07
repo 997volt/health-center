@@ -17,7 +17,7 @@ const int DAYS_TO_ANALYSE = 10;
 const float COEFFICENT_BULKING_MAX = 0.05f;
 const float COEFFICENT_BULKING_MIN = 0.025f;
 
-ifstream open_wl_file(string path);
+ifstream open_wl_file(string const& path);
 
 class WaistlineData {
 private:
@@ -28,7 +28,7 @@ private:
     float bodyfat;
     float musclemass;
 
-    vector<size_t> get_comma_positions(string data_row) const{
+    vector<size_t> get_comma_positions(string_view const& data_row) const{
         vector<size_t> positions;
         size_t pos = data_row.find(CSV_SEPARATOR, 0);
         while(pos != string::npos)
@@ -39,10 +39,10 @@ private:
         return positions;
     }
 
-    string read_element(string data_row, vector<size_t> comma_positions, size_t element_number) const{
+    string read_element(string_view const& data_row, vector<size_t> comma_positions, size_t element_number) const{
         string result = "";
         if(element_number == 0){
-            result = data_row.substr(0,comma_positions[0]);;
+            result = data_row.substr(0,comma_positions[0]);
         }
         else if (element_number == WLDATA_COLS_NUMBER-1) {
             result = data_row.substr(
@@ -59,7 +59,7 @@ private:
         return result;
     }
 
-    tm get_date(string date_string) const{
+    tm get_date(string const& date_string) const{
         tm date = {};
         istringstream ss(date_string);
         ss >> get_time(&date, "%m/%d/%Y");
@@ -67,7 +67,7 @@ private:
     }
 
 public:
-    WaistlineData(string data_row) {
+    WaistlineData(string_view const& data_row) {
         vector<size_t> comma_positions = get_comma_positions(data_row);
 
         date = get_date(read_element(data_row, comma_positions, 0));
@@ -184,7 +184,7 @@ class Regression {
         }
 };
 
-ifstream open_wl_file(string path){
+ifstream open_wl_file(string const& path){
     ifstream file(path);
     if (!file.is_open()) {
         throw runtime_error("Error opening file");
@@ -192,7 +192,7 @@ ifstream open_wl_file(string path){
     return file;
 }
 
-void read_wl_data(string path, vector<WaistlineData> &wldata){
+void read_wl_data(string const& path, vector<WaistlineData> &wldata){
     ifstream file = open_wl_file(path);
     string line;
     while (getline(file, line)) {
