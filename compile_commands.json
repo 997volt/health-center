@@ -5,10 +5,10 @@
       "-c",
       "-o",
       "out/health-center",
-      "main.cpp"
+      "code/main.cpp"
     ],
     "directory": "/home/user/Documents/code/health-center",
-    "file": "/home/user/Documents/code/health-center/main.cpp",
+    "file": "/home/user/Documents/code/health-center/code/main.cpp",
     "output": "/home/user/Documents/code/health-center/out/health-center"
   }
 ]
