@@ -197,7 +197,7 @@ void read_wl_data(string const& path, vector<WaistlineData> &wldata){
     string line;
     while (getline(file, line)) {
         if(line.find("Date") == std::string::npos){
-            wldata.push_back(WaistlineData(line));
+            wldata.emplace_back(line);
         }
     }
     file.close();
