@@ -67,7 +67,7 @@ private:
     }
 
 public:
-    WaistlineData(string_view const& data_row) {
+    explicit WaistlineData(string_view const& data_row) {
         vector<size_t> comma_positions = get_comma_positions(data_row);
 
         date = get_date(read_element(data_row, comma_positions, 0));
@@ -187,7 +187,7 @@ class Regression {
 ifstream open_wl_file(string const& path){
     ifstream file(path);
     if (!file.is_open()) {
-        throw runtime_error("Error opening file");
+        throw invalid_argument("Error opening file");
     }
     return file;
 }
