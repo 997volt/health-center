@@ -60,10 +60,10 @@ private:
     }
 
     tm get_date(string const& date_string) const{
-        tm date = {};
+        tm ret_date = {};
         istringstream ss(date_string);
-        ss >> get_time(&date, "%m/%d/%Y");
-        return date;
+        ss >> get_time(&ret_date, "%m/%d/%Y");
+        return ret_date;
     }
 
 public:
