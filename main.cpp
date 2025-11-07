@@ -218,7 +218,7 @@ void analyse_regression(float coefficent){
 int get_average_calories(vector<WaistlineData> &wldata, int num_of_measurements){
     float sum_calories = 0;
     float num_of_found_measurements = 0;
-    int avg_calories;
+    int avg_calories = 0;
     if(num_of_measurements <= wldata.size()){
         for (int day = 0; day < num_of_measurements; day++){
             long data_index = wldata.size() - num_of_measurements + day;
@@ -239,7 +239,7 @@ int get_average_calories(vector<WaistlineData> &wldata, int num_of_measurements)
 float get_average_bodyfat(vector<WaistlineData> &wldata, int num_of_measurements){
     float sum_bodyfat = 0;
     float num_of_found_measurements = 0;
-    float avg_bodyfat;
+    float avg_bodyfat = 0;
     if(num_of_measurements <= wldata.size()){
         for (int day = 0; day < num_of_measurements; day++){
             int data_index = (int)wldata.size() - num_of_measurements + day;
@@ -259,7 +259,7 @@ float get_average_bodyfat(vector<WaistlineData> &wldata, int num_of_measurements
 int main() {
     vector<WaistlineData> wldata;
     read_wl_data("in/diary_export.csv", wldata);
-    Regression regression = Regression(wldata, DAYS_TO_ANALYSE);
+    auto regression = Regression(wldata, DAYS_TO_ANALYSE);
     regression.print_function();
     analyse_regression(regression.get_coefficent());
 
