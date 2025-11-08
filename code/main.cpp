@@ -7,10 +7,10 @@
 #include <sstream>
 #include <vector>
 
+#include "WaistlineData.h"
+
 using namespace std;
 
-const int WLDATA_COLS_NUMBER = 11;
-const char CSV_SEPARATOR = ';';
 const int DAYS_TO_ANALYSE = 10;
 
 //around 0.25% weekly
@@ -18,93 +18,6 @@ const float COEFFICENT_BULKING_MAX = 0.05f;
 const float COEFFICENT_BULKING_MIN = 0.025f;
 
 ifstream open_wl_file(string const& path);
-
-class WaistlineData {
-private:
-    tm date;
-    int calories;
-    float protein;
-    float weight;
-    float bodyfat;
-    float musclemass;
-
-    vector<size_t> get_comma_positions(string_view const& data_row) const{
-        vector<size_t> positions;
-        size_t pos = data_row.find(CSV_SEPARATOR, 0);
-        while(pos != string::npos)
-        {
-            positions.push_back(pos);
-            pos = data_row.find(CSV_SEPARATOR,pos+1);
-        }
-        return positions;
-    }
-
-    string read_element(string_view const& data_row, vector<size_t> comma_positions, size_t element_number) const{
-        string result = "";
-        if(element_number == 0){
-            result = data_row.substr(0,comma_positions[0]);
-        }
-        else if (element_number == WLDATA_COLS_NUMBER-1) {
-            result = data_row.substr(
-                comma_positions[element_number-1]+1, data_row.length());
-        }
-        else {
-            result = data_row.substr(
-                comma_positions[element_number-1]+1,
-                comma_positions[element_number]-comma_positions[element_number-1]-1);
-        }
-        if(result == ""){
-            result = "0";
-        }
-        return result;
-    }
-
-    tm get_date(string const& date_string) const{
-        tm ret_date = {};
-        istringstream ss(date_string);
-        ss >> get_time(&ret_date, "%m/%d/%Y");
-        return ret_date;
-    }
-
-public:
-    explicit WaistlineData(string_view const& data_row) {
-        vector<size_t> comma_positions = get_comma_positions(data_row);
-
-        date = get_date(read_element(data_row, comma_positions, 0));
-        calories = stoi(read_element(data_row, comma_positions, 1));
-        protein = stof(read_element(data_row, comma_positions, 6));
-        weight = stof(read_element(data_row, comma_positions, 8));
-        bodyfat = stof(read_element(data_row, comma_positions, 9));
-        musclemass = stof(read_element(data_row, comma_positions, 10));
-    }
-
-    void printdata() const{
-        cout << "date: " << date.tm_mday << "-" << date.tm_mon+1 << "-" << date.tm_year+1900 
-        << ",  calories: " << calories 
-        << ",  protein: " << protein 
-        << ",  weight: " << weight 
-        << ",  bodyfat: " << bodyfat 
-        << ",  musclemass: " << musclemass
-        << endl;
-    }
-
-    tm get_tm_date() const{
-        return date;
-    }
-
-    int get_calories() const{
-        return calories;
-    }
-
-    float get_bodyfat() const{
-        return bodyfat;
-    }
-
-
-    float get_weight() const{
-        return weight;
-    }
-};
 
 class Regression {
     private:

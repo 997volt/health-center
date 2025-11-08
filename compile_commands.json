@@ -10,5 +10,17 @@
     "directory": "/home/user/Documents/code/health-center",
     "file": "/home/user/Documents/code/health-center/code/main.cpp",
     "output": "/home/user/Documents/code/health-center/out/health-center"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-o",
+      "out/health-center",
+      "code/WaistlineData.cpp"
+    ],
+    "directory": "/home/user/Documents/code/health-center",
+    "file": "/home/user/Documents/code/health-center/code/WaistlineData.cpp",
+    "output": "/home/user/Documents/code/health-center/out/health-center"
   }
 ]
