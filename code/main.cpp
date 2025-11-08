@@ -17,8 +17,6 @@ const int DAYS_TO_ANALYSE = 10;
 const float COEFFICENT_BULKING_MAX = 0.05f;
 const float COEFFICENT_BULKING_MIN = 0.025f;
 
-ifstream open_wl_file(string const& path);
-
 class Regression {
     private:
         vector<float> x;
@@ -97,25 +95,6 @@ class Regression {
         }
 };
 
-ifstream open_wl_file(string const& path){
-    ifstream file(path);
-    if (!file.is_open()) {
-        throw invalid_argument("Error opening file");
-    }
-    return file;
-}
-
-void read_wl_data(string const& path, vector<WaistlineData> &wldata){
-    ifstream file = open_wl_file(path);
-    string line;
-    while (getline(file, line)) {
-        if(line.find("Date") == std::string::npos){
-            wldata.emplace_back(line);
-        }
-    }
-    file.close();
-}
-
 void analyse_regression(float coefficent){
     if(coefficent > COEFFICENT_BULKING_MAX){
         cout << "Coefficent > " << COEFFICENT_BULKING_MAX << "; too many calories for bulking" << endl;
@@ -126,47 +105,6 @@ void analyse_regression(float coefficent){
     else{
         cout << "Coefficent < " << COEFFICENT_BULKING_MIN << "; too little calories for bulking" << endl;
     }
-}
-
-int get_average_calories(vector<WaistlineData> &wldata, int num_of_measurements){
-    float sum_calories = 0;
-    float num_of_found_measurements = 0;
-    int avg_calories = 0;
-    if(num_of_measurements <= wldata.size()){
-        for (int day = 0; day < num_of_measurements; day++){
-            long data_index = wldata.size() - num_of_measurements + day;
-            int wlcaloreis = wldata[data_index].get_calories();
-            if (wlcaloreis != 0){
-                sum_calories += (float)wlcaloreis;
-                num_of_found_measurements++;
-            }
-        }
-    }
-    if(num_of_found_measurements > 0){
-        avg_calories = (int)(sum_calories/num_of_found_measurements);
-    }
-    return avg_calories;
-}
-
-
-float get_average_bodyfat(vector<WaistlineData> &wldata, int num_of_measurements){
-    float sum_bodyfat = 0;
-    float num_of_found_measurements = 0;
-    float avg_bodyfat = 0;
-    if(num_of_measurements <= wldata.size()){
-        for (int day = 0; day < num_of_measurements; day++){
-            int data_index = (int)wldata.size() - num_of_measurements + day;
-            float wl_bodyfat = wldata[data_index].get_bodyfat();
-            if (wl_bodyfat != 0){
-                sum_bodyfat += wl_bodyfat;
-                num_of_found_measurements++;
-            }
-        }
-    }
-    if(num_of_found_measurements > 0){
-        avg_bodyfat = sum_bodyfat/num_of_found_measurements;
-    }
-    return avg_bodyfat;
 }
 
 int main() {

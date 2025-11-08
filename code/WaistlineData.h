@@ -3,6 +3,7 @@
 
 #include <ctime>
 #include <string>
+#include <fstream>
 #include <vector>
 
 const char CSV_SEPARATOR = ';';
@@ -32,5 +33,9 @@ public:
     float get_weight() const;
 };
 
+std::ifstream open_wl_file(std::string const& path);
+void read_wl_data(std::string const& path, std::vector<WaistlineData> &wldata);
+int get_average_calories(std::vector<WaistlineData> &wldata, int num_of_measurements);
+float get_average_bodyfat(std::vector<WaistlineData> &wldata, int num_of_measurements);
 
 #endif // WAISTLINE_DATA_H

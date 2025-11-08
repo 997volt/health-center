@@ -77,7 +77,66 @@ float WaistlineData::get_bodyfat() const{
     return bodyfat;
 }
 
-
 float WaistlineData::get_weight() const{
     return weight;
 }
+
+std::ifstream open_wl_file(std::string const& path){
+    std::ifstream file(path);
+    if (!file.is_open()) {
+        throw std::invalid_argument("Error opening file");
+    }
+    return file;
+}
+
+void read_wl_data(std::string const& path, std::vector<WaistlineData> &wldata){
+    std::ifstream file = open_wl_file(path);
+    std::string line;
+    while (getline(file, line)) {
+        if(line.find("Date") == std::string::npos){
+            wldata.emplace_back(line);
+        }
+    }
+    file.close();
+}
+
+int get_average_calories(std::vector<WaistlineData> &wldata, int num_of_measurements){
+    float sum_calories = 0;
+    float num_of_found_measurements = 0;
+    int avg_calories = 0;
+    if(num_of_measurements <= wldata.size()){
+        for (int day = 0; day < num_of_measurements; day++){
+            long data_index = wldata.size() - num_of_measurements + day;
+            int wlcaloreis = wldata[data_index].get_calories();
+            if (wlcaloreis != 0){
+                sum_calories += (float)wlcaloreis;
+                num_of_found_measurements++;
+            }
+        }
+    }
+    if(num_of_found_measurements > 0){
+        avg_calories = (int)(sum_calories/num_of_found_measurements);
+    }
+    return avg_calories;
+}
+
+float get_average_bodyfat(std::vector<WaistlineData> &wldata, int num_of_measurements){
+    float sum_bodyfat = 0;
+    float num_of_found_measurements = 0;
+    float avg_bodyfat = 0;
+    if(num_of_measurements <= wldata.size()){
+        for (int day = 0; day < num_of_measurements; day++){
+            int data_index = (int)wldata.size() - num_of_measurements + day;
+            float wl_bodyfat = wldata[data_index].get_bodyfat();
+            if (wl_bodyfat != 0){
+                sum_bodyfat += wl_bodyfat;
+                num_of_found_measurements++;
+            }
+        }
+    }
+    if(num_of_found_measurements > 0){
+        avg_bodyfat = sum_bodyfat/num_of_found_measurements;
+    }
+    return avg_bodyfat;
+}
+
