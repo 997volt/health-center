@@ -48,22 +48,26 @@ void Regression::calculate_regression(){
 void Regression::remove_outliers(){
     float highest_diff = 0;
     int highest_diff_index = 0;
-    print_data();
-    calculate_regression();
-
-    for (int day = 0; day < x.size(); day++){
-        float calc_y = a * x[day] + b;
-        float diff = std::fabs(y[day] - calc_y);
-        if(diff > highest_diff){
-            highest_diff = diff;
-            highest_diff_index = day;
+    bool found = false;
+    do{
+        highest_diff = 0;
+        calculate_regression();
+        for (int day = 0; day < x.size(); day++){
+            float calc_y = a * x[day] + b;
+            float diff = std::fabs(y[day] - calc_y);
+            if(diff > highest_diff){
+                highest_diff = diff;
+                highest_diff_index = day;
+            }
         }
-    }
-    if(highest_diff > 1){
-        y.erase(y.begin() + highest_diff_index);
-        x.erase(x.begin() + highest_diff_index);
-    }
-    print_data();
+        if(highest_diff > 1){
+            found = true;
+            y.erase(y.begin() + highest_diff_index);
+            x.erase(x.begin() + highest_diff_index);
+        }else{
+            found = false;
+        }
+    }while(found);
 }
 
     
