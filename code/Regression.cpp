@@ -5,6 +5,7 @@
 
 #include "Regression.h"
 
+const float OUTLIER_DIFF_TO_REMOVE = 1.0f;
 
 void Regression::calculate_sums(){
     sum_x = 0;
@@ -60,7 +61,7 @@ void Regression::remove_outliers(){
                 highest_diff_index = day;
             }
         }
-        if(highest_diff > 1){
+        if(highest_diff > OUTLIER_DIFF_TO_REMOVE){
             found = true;
             y.erase(y.begin() + highest_diff_index);
             x.erase(x.begin() + highest_diff_index);
