@@ -1,3 +1,4 @@
+#include <cmath>
 #include <iostream>
 #include <ostream>
 #include <vector>
@@ -38,6 +39,24 @@ void Regression::calculate_b(){
     b = numerator / denominator;
 }
 
+void Regression::remove_outliers(){
+    float highest_diff = 0;
+    int highest_diff_index = 0;
+
+    for (int day = 0; day < x.size(); day++){
+        float calc_y = a * x[day] + b;
+        float diff = std::fabs(y[day] - calc_y);
+        if(diff > highest_diff){
+            highest_diff = diff;
+            highest_diff_index = day;
+        }
+    }
+    if(highest_diff > 1){
+        y.erase(y.begin() + highest_diff_index);
+        x.erase(x.begin() + highest_diff_index);
+    }
+}
+
     
 Regression::Regression(std::vector<WaistlineData> &wldata, int num_of_measurements){
     if(num_of_measurements <= wldata.size()){
@@ -53,6 +72,8 @@ Regression::Regression(std::vector<WaistlineData> &wldata, int num_of_measuremen
     calculate_sums();
     calculate_a();
     calculate_b();
+    print_data();
+    remove_outliers();
     print_data();
 }
 
