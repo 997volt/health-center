@@ -39,9 +39,17 @@ void Regression::calculate_b(){
     b = numerator / denominator;
 }
 
+void Regression::calculate_regression(){
+    calculate_sums();
+    calculate_a();
+    calculate_b();
+}
+
 void Regression::remove_outliers(){
     float highest_diff = 0;
     int highest_diff_index = 0;
+    print_data();
+    calculate_regression();
 
     for (int day = 0; day < x.size(); day++){
         float calc_y = a * x[day] + b;
@@ -55,6 +63,7 @@ void Regression::remove_outliers(){
         y.erase(y.begin() + highest_diff_index);
         x.erase(x.begin() + highest_diff_index);
     }
+    print_data();
 }
 
     
@@ -69,12 +78,8 @@ Regression::Regression(std::vector<WaistlineData> &wldata, int num_of_measuremen
             }
         }
     }
-    calculate_sums();
-    calculate_a();
-    calculate_b();
-    print_data();
     remove_outliers();
-    print_data();
+    calculate_regression();
 }
 
 float Regression::get_coefficent() const{
@@ -91,7 +96,7 @@ void Regression::print_function() const{
 
 void Regression::print_data() const{
     for (int day = 0; day < x.size(); day++){
-        std::cout << day << ": y = " << y[day] << " x = " << x[day] << std::endl;
+        std::cout << day << ": x = " << x[day] << " y = " << y[day] << std::endl;
     }
 }
 

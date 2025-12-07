@@ -23,6 +23,7 @@ class Regression {
         void calculate_sums();
         void calculate_a(); // a is a coefficent of calculated function
         void calculate_b(); // b is contant term of calculated function
+        void calculate_regression();
         void remove_outliers();
     
     public:
