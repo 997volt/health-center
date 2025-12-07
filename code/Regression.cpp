@@ -53,6 +53,7 @@ Regression::Regression(std::vector<WaistlineData> &wldata, int num_of_measuremen
     calculate_sums();
     calculate_a();
     calculate_b();
+    print_data();
 }
 
 float Regression::get_coefficent() const{
@@ -65,6 +66,12 @@ float Regression::get_contant_term() const{
 
 void Regression::print_function() const{
     std::cout << "y = " << a << "x + " << b << std::endl;
+}
+
+void Regression::print_data() const{
+    for (int day = 0; day < x.size(); day++){
+        std::cout << day << ": y = " << y[day] << " x = " << x[day] << std::endl;
+    }
 }
 
 void analyse_regression(float coefficent){

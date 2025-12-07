@@ -29,6 +29,7 @@ class Regression {
         float get_coefficent() const;
         float get_contant_term() const;
         void print_function() const;
+        void print_data() const;
 };
 
 void analyse_regression(float coefficent);
